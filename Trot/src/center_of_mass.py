@@ -8,7 +8,7 @@ from LegModel.legs import LegModel
 
 model = mujoco_py.load_model_from_path("../models/dynamic_4l.xml")
 sim = mujoco_py.MjSim(model)
-length_tail = 0.169
+length_tail = 0.158
 
 #求身体的质心
 def get_CoMofBody(model, sim):
@@ -110,14 +110,8 @@ def get_CoMofSpine(model, translation_body_w, rotation_body_w, spine, length, le
         T_com_start = transformation_mat.get_homo_translation(translation_com_start)
         T_com_w =T_start_w @ T_com_start
         com_spine = T_com_w[:3]
-    ##写出x_bar, Radius, theta(圆心角)
 
-    # Hip 部分
-    # rotation_hip_end = R.from_euler('x', np.radians(8.8)).as_matrix() 
-    # translation_hip_end = np.array([0.0, 0.0165, -0.0009])
     T_hip_end = transformation_mat.get_transfomation_mat('hip')
-    # T_hip_end = np.eye(4)
-    # T_end_w = np.eye(4)
     T_hip_w = T_end_w @ T_hip_end
     com_hip = T_hip_w[:3,3]    
         
@@ -132,24 +126,22 @@ def get_CoMofSpine(model, translation_body_w, rotation_body_w, spine, length, le
 
 #尾巴部分
 def get_CoMofTail(T_hip_w, tail_angle):
-    #main 部分计算 pos="0 0.0217 0.0028" euler="15 0 0"  相对于hip
-    T_tail_main_hip = np.array([0, 0.0217, 0.0028]) # 1*3
-    R_tail_main_hip = R.from_euler('x', np.radians(-15)).as_matrix()  # 绕 X 轴旋转 8.8°
+    T_tail_main_hip = np.array([0, 0.0217, 0.0028]) # dynamic line 140
+    R_tail_main_hip = R.from_euler('x', np.radians(15)).as_matrix()  # 绕 X 轴旋转 15
     trans_tail_main_hip = transformation_mat.get_homogeneous_transformation(R_tail_main_hip, T_tail_main_hip)
     trans_tail_main_world = T_hip_w @ trans_tail_main_hip   
-    homo_com_tail_main = trans_tail_main_world @ np.array([0,0.0175,-0.013,1])
+    homo_com_tail_main = trans_tail_main_world @ np.array([0,0.0175,-0.013,1]) #tail line3
     com_tail_main = homo_com_tail_main[:3]
 
     ##尾巴的计算
-    trans_start_main = transformation_mat.get_translation_matrix(np.array([0, 0.03525, -0.0174]))
-    # 0.008*18/2*np.cos(np.radians(19)) -0.0259
+    trans_start_main = transformation_mat.get_translation_matrix(np.array([0, 0.03525, -0.0174])) #tail line 10
 
-    translation_mat_com_start = transformation_mat.get_translation_matrix(np.array([0, 0.168/2, -0.02/2])) # y-0.008
+    translation_mat_com_start = transformation_mat.get_translation_matrix(np.array([0, 0.1493/2, -0.0514/2]))# 长度0.158 -19度偏转
     homo_tail_com = (trans_tail_main_world @ trans_start_main @ translation_mat_com_start)[:3,3] # From tail.xml
     com_tail = homo_tail_com[:3]
 
     ##电机的计算
-    T_servo_main = np.array([0, 0.0152, 0.001])
+    T_servo_main = np.array([0, 0.0152, 0.001]) # tail line 200
     R_servo_main = R.from_euler('x', np.radians(-19)).as_matrix()
     trans_servo_main = transformation_mat.get_homogeneous_transformation(R_servo_main, T_servo_main)
     trans_servo_world = trans_tail_main_world @ trans_servo_main

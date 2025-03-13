@@ -4,7 +4,7 @@ from scipy.spatial.transform import Rotation as R
 
 tree = ET.parse('../models/dynamic_4l.xml')
 root = tree.getroot()
-factor = 0.28
+factor = 0.6
 # 通过xml文件获得transformation matrix
 def get_transfomation_mat(bodyname):
     for body in root.iter('body'):
@@ -34,8 +34,6 @@ def get_trans_spine_start_to_end(spine, length, length_yz):
     theta_x = np.radians(-23.7)
     theta = 2 * spine
     rotation = np.eye(3)
-    length = factor * length
-    length_yz = factor * length_yz
     print ("theta: " ,theta)
     if np.abs(spine) > 1e-6:
         Radius = np.abs(length / theta) 

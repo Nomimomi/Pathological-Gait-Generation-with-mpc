@@ -20,8 +20,9 @@ if __name__ == '__main__':
 	print(f"Selected gait type: {gait_type}")
 
 	# 计算xy平面静止状态下的spine长度和yz平面的长度
-	length = utils.calculate_spine_length_xy() 	#length of spine:  0.03361089834571633
-	length_yz = utils.calculate_spine_length_yz() #length of spine in z:  -0.014062572143769596
+	length_factor = 0.60
+	length = length_factor * utils.calculate_spine_length_xy() 	#length of spine:  0.03361089834571633
+	length_yz = length_factor * utils.calculate_spine_length_yz() #length of spine in z:  -0.014062572143769596
 
 	run_steps_num = int(RUN_TIME_LENGTH / time_step) # 总共模拟步长
 	delay_steps = int(delay_time / time_step)  
@@ -92,7 +93,7 @@ if __name__ == '__main__':
 		difference_z.append(com_eval[2]-curr_com[2])
 		# print(f"Step {i}: differences {com_eval[0]-curr_com[0]}")
 total_error = utils.calculate_error(run_steps_num, 500, com_x_coords, com_x_eval)
-# print("total error: ", total_error)
+print("total error: ", total_error)
 # 存储log数据-----------------------------------------------------
 df = pd.DataFrame(log_data)
 df.to_csv('center_of_mass_log.csv', index = False)
