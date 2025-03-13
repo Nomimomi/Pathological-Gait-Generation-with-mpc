@@ -8,7 +8,7 @@ from LegModel.legs import LegModel
 
 model = mujoco_py.load_model_from_path("../models/dynamic_4l.xml")
 sim = mujoco_py.MjSim(model)
-length_tail = 0.158
+length_tail = 0.168
 
 #求身体的质心
 def get_CoMofBody(model, sim):
@@ -136,7 +136,7 @@ def get_CoMofTail(T_hip_w, tail_angle):
     ##尾巴的计算
     trans_start_main = transformation_mat.get_translation_matrix(np.array([0, 0.03525, -0.0174])) #tail line 10
 
-    translation_mat_com_start = transformation_mat.get_translation_matrix(np.array([0, 0.1493/2, -0.0514/2]))# 长度0.158 -19度偏转
+    translation_mat_com_start = transformation_mat.get_translation_matrix(np.array([0, length_tail*np.cos(np.radians(-19))/2, length_tail*np.sin(np.radians(-19))/2]))# 长度0.168 -19度偏转
     homo_tail_com = (trans_tail_main_world @ trans_start_main @ translation_mat_com_start)[:3,3] # From tail.xml
     com_tail = homo_tail_com[:3]
 

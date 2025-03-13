@@ -4,7 +4,6 @@ from scipy.spatial.transform import Rotation as R
 
 tree = ET.parse('../models/dynamic_4l.xml')
 root = tree.getroot()
-factor = 0.6
 # 通过xml文件获得transformation matrix
 def get_transfomation_mat(bodyname):
     for body in root.iter('body'):
