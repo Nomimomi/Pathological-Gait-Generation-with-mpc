@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 import center_of_mass
 import pandas as pd
 import numpy as np
-import utils, argparse
+import argparse
+from utils import utils
 # --------------------
 RUN_TIME_LENGTH = 4
 if __name__ == '__main__':
@@ -20,7 +21,7 @@ if __name__ == '__main__':
 	print(f"Selected gait type: {gait_type}")
 
 	# 计算xy平面静止状态下的spine长度和yz平面的长度
-	length_factor = 0.60
+	length_factor = 1
 	length = length_factor * utils.calculate_spine_length_xy() 	#length of spine:  0.03361089834571633
 	length_yz = length_factor * utils.calculate_spine_length_yz() #length of spine in z:  -0.014062572143769596
 
