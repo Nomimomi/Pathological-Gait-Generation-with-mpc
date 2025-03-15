@@ -69,7 +69,7 @@ if __name__ == '__main__':
 		ctrlData = tCtrlData
 		theMouse.runStep(ctrlData, time_step, render_flag)
 		# 打印每一步的com
-		curr_com = center_of_mass.get_CoM_Reference(theMouse.model, theMouse.sim,0)
+		curr_com = center_of_mass.get_CoM_Reference(theMouse.model, theMouse.sim,1)
 		com_vel = (curr_com - pre_com) / time_step
 		vel_x_list.append(com_vel[0])
 		vel_y_list.append(com_vel[1])
